@@ -21,6 +21,10 @@ app.get('/website', (c) => {
   return c.redirect('https://www.google.com')
 })
 
+app.get('/website', (c) => {
+  return c.redirect('https://www.google.com')
+})
+
 app.get('/notfound' , (c) => {
   return c.json({ message: 'Not Found' }, 404)
 })

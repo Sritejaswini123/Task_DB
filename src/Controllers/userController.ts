@@ -1,13 +1,15 @@
 // src/Controllers/userController.ts
 import { Hono } from "hono";
-import * as userService from "../services/userService.js";
+
+
 import type { Context } from "hono";
+import { getAllUsers, createUser,getUserById, updateUserById, deleteUserById} from "../services/userService.js";
 //creating the user 
 export const userController = new Hono();
-export const createUser = async (c: Context) => {
+export const createNewUser = async (c: Context) => {
   try {
     const body = await c.req.json(); 
-    const insertData = await userService.createUser(body) 
+    const insertData = await createUser(body) 
     return c.json(insertData); 
   } catch (err) {
     return c.json({ error: "the email id is already taken" }, 400);
@@ -15,14 +17,17 @@ export const createUser = async (c: Context) => {
 }
 
 //GET ALL USERS :
-export const  getAllUsers = async (c: Context) => {
-  const users = await userService.getAllUsers(); 
+export const  getAll= async (c: Context) => {
+  const users = await getAllUsers(); 
   return c.json(users);
 }
+
+
+
 //GET  BY ID 
-    export const getUserById = async (c: Context) => {
+    export const getById = async (c: Context) => {
     const id = Number(c.req.param("id")); // convert string to number
-    const user = await userService.getUserById(id);
+    const user = await getUserById(id);
     if (user.length === 0) {
       return c.json({ error: "User not found" }, 404);
     }
@@ -31,10 +36,10 @@ export const  getAllUsers = async (c: Context) => {
   
 
 // Update user by ID
-export const updateUserById = async (c: Context) => {
+export const updateById = async (c: Context) => {
   const id = Number(c.req.param("id"));
   const body = await c.req.json();
-  const updatedUser = await userService.updateUserById(id, body);
+  const updatedUser = await updateUserById(id, body);
   if (updatedUser.length === 0) {
     return c.json({ error: "User not found" }, 404);
   }
@@ -42,9 +47,9 @@ export const updateUserById = async (c: Context) => {
 };
 
   //Delete by id
- export const deleteUserById = async (c: Context) => {
+ export const deleteById = async (c: Context) => {
     const id = Number(c.req.param("id")); // convert string to number
-    const deleted = await userService.deleteUserById(id);
+    const deleted = await deleteUserById(id);
   if (deleted.length === 0) {
     return c.json({error: "User not found" }, 404);
   }
